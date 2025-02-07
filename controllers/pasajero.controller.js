@@ -72,8 +72,8 @@ exports.updatePasajero = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión' });
         }
 
-        const query = 'UPDATE Pasajero SET nombre_completo = ?, correo = ?, telefono = ?, contraseña = ? WHERE id = ?';
-        conn.query(query, [nombre_completo, correo, telefono, contraseña, id], (err, results) => {
+        const query = 'UPDATE Pasajero SET contraseña = ? WHERE id = ?';
+        conn.query(query, [contraseña, id], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
                 return res.status(500).json({ error: err });

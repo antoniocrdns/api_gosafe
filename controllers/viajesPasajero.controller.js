@@ -16,7 +16,7 @@ exports.getViajesPasajero = (req, res) => {
 };
 
 exports.getViajePasajeroById = (req, res) => {
-    const { id } = req.params;
+    const { id_pasajero } = req.params;
 
     req.getConnection((err, conn) => {
         if (err) {
@@ -24,7 +24,7 @@ exports.getViajePasajeroById = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión' });
         }
 
-        conn.query('SELECT * FROM Viajes_pasajero WHERE id = ?', [id], (err, results) => {
+        conn.query('SELECT * FROM Viajes_pasajero WHERE id_pasajero = ?', [id_pasajero], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
                 return res.status(500).json({ error: err });
@@ -32,7 +32,7 @@ exports.getViajePasajeroById = (req, res) => {
             if (results.length === 0) {
                 return res.status(404).json({ message: 'Viaje no encontrado' });
             }
-            res.status(200).json(results[0]);
+            res.status(200).json(results);
         });
     });
 };
