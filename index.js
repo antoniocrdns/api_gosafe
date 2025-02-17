@@ -27,6 +27,9 @@ app.use('/api', conductorRoutes);
 
 // Inicializar server
 const PORT = process.env.PORT || 3000;
+app.get('/', (req, res) => {
+    res.send(`Servidor corriendo en puerto ${PORT}`);
+});
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

@@ -50,8 +50,8 @@ exports.createPasajero = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión' });
         }
 
-        const query = 'INSERT INTO Pasajero (nombre_completo, correo, telefono, contraseña, rol) VALUES (?, ?, ?, ?, ?)';
-        conn.query(query, [nombre_completo, correo, telefono, contraseña, 1], (err, results) => {
+        const query = 'INSERT INTO Pasajero (nombre_completo, correo, telefono, contraseña, rol, activo) VALUES (?, ?, ?, ?, ?, ?)';
+        conn.query(query, [nombre_completo, correo, telefono, contraseña, 1, 1], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
                 return res.status(500).json({ error: err });
@@ -72,6 +72,30 @@ exports.updatePasajero = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión' });
         }
 
+        const query = 'UPDATE Pasajero SET nombre_completo = ?, correo = ?, telefono = ?, contraseña = ?, activo = ? WHERE id = ?';
+        conn.query(query, [nombre_completo, correo, telefono, contraseña, id], (err, results) => {
+            if (err) {
+                console.error('Error en la consulta:', err);
+                return res.status(500).json({ error: err });
+            }
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ message: 'Pasajero no encontrado' });
+            }
+            res.status(200).json({ message: 'Pasajero actualizado' });
+        });
+    });
+};
+
+exports.updatePasajeroPassword = (req, res) => {
+    const { id } = req.params;
+    const { contraseña } = req.body;
+
+    req.getConnection((err, conn) => {
+        if (err) {
+            console.error('Error de conexión:', err);
+            return res.status(500).json({ error: 'Error de conexión' });
+        }
+
         const query = 'UPDATE Pasajero SET contraseña = ? WHERE id = ?';
         conn.query(query, [contraseña, id], (err, results) => {
             if (err) {
@@ -81,7 +105,7 @@ exports.updatePasajero = (req, res) => {
             if (results.affectedRows === 0) {
                 return res.status(404).json({ message: 'Pasajero no encontrado' });
             }
-            res.status(200).json({ message: 'Pasajero actualizado' });
+            res.status(200).json({ message: 'Contaseña actualizada' });
         });
     });
 };

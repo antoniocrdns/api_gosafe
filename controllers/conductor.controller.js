@@ -50,8 +50,8 @@ exports.createConductor = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión' });
         }
 
-        const query = 'INSERT INTO Conductor (nombre_completo, correo, telefono, contraseña, rol) VALUES (?, ?, ?, ?, ?)';
-        conn.query(query, [nombre_completo, correo, telefono, contraseña, 2], (err, results) => {
+        const query = 'INSERT INTO Conductor (nombre_completo, correo, telefono, contraseña, rol, activo) VALUES (?, ?, ?, ?, ?, ?)';
+        conn.query(query, [nombre_completo, correo, telefono, contraseña, 2, 1], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
                 return res.status(500).json({ error: err });
@@ -64,7 +64,7 @@ exports.createConductor = (req, res) => {
 
 exports.updateConductor = (req, res) => {
     const { id } = req.params;
-    const { nombre_completo, correo, telefono, contraseña } = req.body;
+    const { nombre_completo, correo, telefono, contraseña, activo } = req.body;
 
     req.getConnection((err, conn) => {
         if (err) {
@@ -72,8 +72,8 @@ exports.updateConductor = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión' });
         }
 
-        const query = 'UPDATE Conductor SET nombre_completo = ?, correo = ?, telefono = ?, contraseña = ? WHERE id = ?';
-        conn.query(query, [nombre_completo, correo, telefono, contraseña, id], (err, results) => {
+        const query = 'UPDATE Conductor SET nombre_completo = ?, correo = ?, telefono = ?, contraseña = ?, activo = ? WHERE id = ?';
+        conn.query(query, [nombre_completo, correo, telefono, contraseña, activo, id], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
                 return res.status(500).json({ error: err });

@@ -38,10 +38,10 @@ exports.getVehiculoById = (req, res) => {
 };
 
 exports.createVehiculo = (req, res) => {
-    const { marca, modelo, placa, color, id_conductor } = req.body;
+    const { marca, modelo, numero_taxi, id_conductor } = req.body;
 
-    if (!marca || !modelo || !placa || !id_conductor) {
-        return res.status(400).json({ error: 'Todos los campos requeridos excepto color' });
+    if (!marca || !modelo || !numero_taxi || !id_conductor) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
     req.getConnection((err, conn) => {
@@ -50,8 +50,8 @@ exports.createVehiculo = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión' });
         }
 
-        const query = 'INSERT INTO Vehiculo (marca, modelo, placa, color, id_conductor) VALUES (?, ?, ?, ?, ?)';
-        conn.query(query, [marca, modelo, placa, color || null, id_conductor], (err, results) => {
+        const query = 'INSERT INTO Vehiculo (marca, modelo, numero_taxi, id_conductor, activo) VALUES (?, ?, ?, ?, 1)';
+        conn.query(query, [marca, modelo, numero_taxi, id_conductor], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
                 return res.status(500).json({ error: err });
@@ -63,7 +63,7 @@ exports.createVehiculo = (req, res) => {
 
 exports.updateVehiculo = (req, res) => {
     const { id } = req.params;
-    const { marca, modelo, placa, color, id_conductor } = req.body;
+    const { marca, modelo, numero_taxi, id_conductor, activo } = req.body;
 
     req.getConnection((err, conn) => {
         if (err) {
@@ -71,7 +71,7 @@ exports.updateVehiculo = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión' });
         }
 
-        const query = 'UPDATE Vehiculo SET marca = ?, modelo = ?, placa = ?, color = ?, id_conductor = ? WHERE id = ?';
+        const query = 'UPDATE Vehiculo SET marca = ?, modelo = ?, numero_taxi = ?, id_conductor = ?, activo = ? WHERE id = ?';
         conn.query(query, [marca, modelo, placa, color || null, id_conductor, id], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
@@ -85,7 +85,7 @@ exports.updateVehiculo = (req, res) => {
     });
 };
 
-exports.deleteVehiculo = (req, res) => {
+/* exports.deleteVehiculo = (req, res) => {
     const { id } = req.params;
 
     req.getConnection((err, conn) => {
@@ -105,4 +105,4 @@ exports.deleteVehiculo = (req, res) => {
             res.status(200).json({ message: 'Vehículo eliminado' });
         });
     });
-};
+}; */

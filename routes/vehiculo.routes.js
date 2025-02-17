@@ -6,6 +6,6 @@ router.get('/vehiculos', vehiculoController.getVehiculos);
 router.get('/vehiculos/:id', vehiculoController.getVehiculoById);
 router.post('/vehiculos', vehiculoController.createVehiculo);
 router.put('/vehiculos/:id', vehiculoController.updateVehiculo);
-router.delete('/vehiculos/:id', vehiculoController.deleteVehiculo);
+// router.delete('/vehiculos/:id', vehiculoController.deleteVehiculo);
 
 module.exports = router;

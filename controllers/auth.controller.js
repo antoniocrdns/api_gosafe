@@ -8,7 +8,7 @@ exports.loginPasajero = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión' });
         }
 
-        const query = 'SELECT * FROM Pasajero WHERE correo = ? AND contraseña = ?';
+        const query = 'SELECT * FROM Pasajero WHERE correo = ? AND contraseña = ? AND activo = 1';
         conn.query(query, [correo, contraseña], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
