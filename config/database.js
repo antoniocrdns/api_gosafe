@@ -16,15 +16,22 @@ module.exports = (app) => {
     app.use(myConnection(mysql, dbOptions, 'single'));
 
     function keepDatabaseAlive(pool) {
+        const intervalTime = 60000; // 60 segundos en lugar de 30
+        let isQueryRunning = false;
+
         setInterval(() => {
-            pool.query('SELECT 1', (err) => {
-                if (err) {
-                    console.error('Error en keep-alive de la base de datos:', err);
-                } else {
-                    console.log('Keep-alive: conexión con la base de datos verificada');
-                }
-            });
-        }, 30000); // Cada 30 segundos
+            if (!isQueryRunning) {
+                isQueryRunning = true;
+                pool.query('SELECT 1', (err) => {
+                    isQueryRunning = false;
+                    if (err) {
+                        console.error('Error en keep-alive de la base de datos:', err);
+                    } else {
+                        console.log('Keep-alive: conexión con la base de datos verificada');
+                    }
+                });
+            }
+        }, intervalTime);
     }
 
     const pool = mysql.createPool(dbOptions);
