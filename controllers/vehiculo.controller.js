@@ -72,7 +72,7 @@ exports.updateVehiculo = (req, res) => {
         }
 
         const query = 'UPDATE Vehiculo SET marca = ?, modelo = ?, numero_taxi = ?, id_conductor = ?, activo = ? WHERE id = ?';
-        conn.query(query, [marca, modelo, placa, color || null, id_conductor, id], (err, results) => {
+        conn.query(query, [marca, modelo, numero_taxi, id_conductor, id], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
                 return res.status(500).json({ error: err });
@@ -84,6 +84,31 @@ exports.updateVehiculo = (req, res) => {
         });
     });
 };
+
+exports.getIdConductorByCodigo = (req, res) => {
+    const { numero_taxi } = req.params;
+
+    req.getConnection((err, conn) => {
+        if (err) {
+            console.error('Error de conexión:', err);
+            return res.status(500).json({ error: 'Error de conexión con la base de datos' });
+        }
+
+        conn.query('SELECT id_conductor FROM Vehiculo WHERE numero_taxi = ?', [numero_taxi], (err, results) => {
+            if (err) {
+                console.error('Error en la consulta:', err);
+                return res.status(500).json({ error: 'Error en la consulta de la base de datos' });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ message: 'Código no correspondiente' });
+            }
+
+            res.status(200).json({ id_conductor: results[0].id_conductor });
+        });
+    });
+};
+
 
 /* exports.deleteVehiculo = (req, res) => {
     const { id } = req.params;
