@@ -64,7 +64,7 @@ exports.createPasajero = (req, res) => {
 
 exports.updatePasajero = (req, res) => {
     const { id } = req.params;
-    const { nombre_completo, correo, telefono, contraseña } = req.body;
+    const { nombre_completo, correo, telefono, contraseña, activo } = req.body;
 
     req.getConnection((err, conn) => {
         if (err) {
@@ -73,7 +73,7 @@ exports.updatePasajero = (req, res) => {
         }
 
         const query = 'UPDATE Pasajero SET nombre_completo = ?, correo = ?, telefono = ?, contraseña = ?, activo = ? WHERE id = ?';
-        conn.query(query, [nombre_completo, correo, telefono, contraseña, id], (err, results) => {
+        conn.query(query, [nombre_completo, correo, telefono, contraseña, activo, id], (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
                 return res.status(500).json({ error: err });
